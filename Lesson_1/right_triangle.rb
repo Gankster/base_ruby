@@ -1,22 +1,23 @@
 print 'Enter the first side of the triangle: '
-a = gets.chomp.to_i
+a = gets.chomp.to_f
 
 print 'Enter the second side of the triangle: '
-b = gets.chomp.to_i
+b = gets.chomp.to_f
 
 print 'Enter the third side of the triangle: '
-c = gets.chomp.to_i
+c = gets.chomp.to_f
 
 equilateral = a == b && a == c
 
 return puts 'This triangle is equilateral and isosceles' if equilateral
 
 isosceles = a == b || a == c || b == c
-sides = [a, b, c].sort { |i, j| j <=> i }
+h = [a, b, c].max
+c1, c2 = [a, b, c].min(2)
 
-return puts 'This triangle is isosceles' if isosceles && sides[0] == sides[1]
+return puts 'This triangle is isosceles' if isosceles && h == c1
 
-right = sides[0]**2 == (sides[1]**2 + sides[2]**2)
+right = (h**2).round(2) == (c1**2 + c2**2).round(2)
 
 if right
   puts 'This is the right triangle'
