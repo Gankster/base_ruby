@@ -1,4 +1,4 @@
 # frozen_string_literal: true
 
-arr = (10..100).select { |e| e if (e % 5).zero? }
+arr = (10..100).step(5).to_a
 arr.each { |a| puts a }

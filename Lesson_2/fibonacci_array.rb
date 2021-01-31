@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
 i = 0
+val = 0
 fibonacci_arr = []
-loop do
+
+while val < 100
   val = if i.zero?
           0
         elsif i == 1
@@ -11,10 +13,7 @@ loop do
           n1, n2 = fibonacci_arr.last(2)
           n1 + n2
         end
-
-  break if val > 100
-
-  fibonacci_arr << val
+  fibonacci_arr << val if val < 100
   i += 1
 end
 
