@@ -18,7 +18,7 @@ class Route
   end
 
   def stations
-    [*list_of_station].prepend(first_station).append(last_station)
+    [first_station, *list_of_station, last_station]
   end
 
   def station_order(station)

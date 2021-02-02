@@ -20,14 +20,9 @@ class Station
     trains.delete(train)
   end
 
-  def trains_by_type
-    list_by_type = {}
-    trains.each do |t|
-      list_by_type[t.type] = list_by_type[t.type].to_i + 1
-    end
+  def trains_by_type(type)
+    trains_by_type = trains.select { |t| t.type == type.to_sym }
     puts 'Number of trains per station by type'
-    list_by_type.each do |type, count|
-      puts "#{type}: #{count}"
-    end
+    puts "#{type}: #{trains_by_type.size}"
   end
 end
