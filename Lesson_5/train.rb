@@ -32,7 +32,7 @@ class Train
 
   class << self
     def find(number)
-      trains.select { |train| train.number == number }.first
+      trains.find { |train| train.number == number }
     end
 
     attr_reader :trains
