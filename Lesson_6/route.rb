@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 require_relative 'instance_counter'
+require_relative 'validation'
 
 class Route
   include InstanceCounter
+  include Validation
 
   attr_reader :first_station, :last_station
 
@@ -29,13 +31,6 @@ class Route
 
   def station_order(station)
     stations.index(station)
-  end
-
-  def valid?
-    validate!
-    true
-  rescue StandardError
-    false
   end
 
   private

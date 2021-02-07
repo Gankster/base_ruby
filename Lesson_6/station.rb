@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 require_relative 'instance_counter'
-
+require_relative 'validation'
 class Station
   include InstanceCounter
+  include Validation
 
   attr_reader :trains, :name
   @stations = []
@@ -38,13 +39,6 @@ class Station
     trains_by_type = trains.select { |t| t.type == type.to_sym }
     puts 'Number of trains per station by type'
     puts "#{type}: #{trains_by_type.size}"
-  end
-
-  def valid?
-    validate!
-    true
-  rescue StandardError
-    false
   end
 
   private

@@ -3,11 +3,13 @@
 require_relative 'manufacturing_company'
 require_relative 'class_level_inheritable_attributes'
 require_relative 'instance_counter'
+require_relative 'validation'
 
 class Train
   include InstanceCounter
   include ManufacturingCompany
   include ClassLevelInheritableAttributes
+  include Validation
   inheritable_attributes :trains
 
   attr_reader :number, :type, :route
@@ -31,9 +33,9 @@ class Train
     @type = type.to_sym
     @speed = 0
     @cars = []
+    validate!
     self.class.trains << self
     register_instance
-    validate!
   end
 
   def stop
@@ -95,13 +97,6 @@ class Train
 
   def stopped?
     speed.zero?
-  end
-
-  def valid?
-    validate!
-    true
-  rescue StandardError
-    false
   end
 
   protected # Also can be useful for children classes
