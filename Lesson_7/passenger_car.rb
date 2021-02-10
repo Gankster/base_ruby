@@ -4,6 +4,7 @@ class PassengerCar < Car
   attr_reader :total_seats, :occupied_seats
 
   def initialize(total_seats)
+    super
     @total_seats = total_seats || 0
     @occupied_seats = 0
     validate!

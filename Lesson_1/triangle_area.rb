@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 print 'Enter the base of the triangle? '
 base = gets.chomp.to_f.round(2)
 

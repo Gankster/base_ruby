@@ -23,6 +23,18 @@ class Main
     0: Exit
   }
 
+  MAIN_ACTIONS = {
+    1 => :create_station,
+    2 => :create_train,
+    3 => :create_and_manage_route,
+    4 => :assign_route,
+    5 => :add_car,
+    6 => :disconnect_car,
+    7 => :move_train,
+    8 => :view_station_list_and_train_list,
+    0 => :stop_app
+  }.freeze
+
   CREATE_TRAIN = %(
   Enter the number of train and type (for exsample: 333 1):
     1: Passenger
@@ -73,28 +85,14 @@ class Main
   attr_reader :stations, :routes, :trains
 
   def choose_action(option)
-    case option
-    when 1
-      create_station
-    when 2
-      create_train
-    when 3
-      create_and_manage_route
-    when 4
-      assign_route
-    when 5
-      add_car
-    when 6
-      disconnect_car
-    when 7
-      move_train
-    when 8
-      view_station_list_and_train_list
-    when 0
-      self.stop = true
-    else
-      puts 'Wrong option'
-    end
+    action = MAIN_ACTIONS[option]
+    raise 'Wrong option' if action.nil?
+
+    send(action)
+  end
+
+  def stop_app
+    self.stop = true
   end
 
   def create_station
@@ -106,7 +104,7 @@ class Main
 
   def create_train
     puts CREATE_TRAIN
-    number, type = gets.chomp.split(' ')
+    number, type = gets.chomp.split
 
     case type.to_i
     when 1
@@ -143,7 +141,7 @@ class Main
   def create_route
     puts 'Enter the first and the last stations from the list (for exsample: 1 2): '
     station_list
-    first, last = gets.chomp.split(' ').map { |i| i.to_i - 1 }
+    first, last = gets.chomp.split.map { |i| i.to_i - 1 }
     routes << Route.new(stations[first], stations[last])
     puts 'Done!'
   end
@@ -272,7 +270,7 @@ class Main
   end
 
   def list_of_stations(stations)
-    stations.each.with_index(1) { |station, i| puts "#{i}: #{station.name}"}
+    stations.each.with_index(1) { |station, i| puts "#{i}: #{station.name}" }
   end
 
   def train_list
@@ -284,15 +282,15 @@ class Main
   end
 
   def list_of_trains(trains)
-    trains.each.with_index(1) { |train, i| puts "#{i}: Train - number: #{train.number} and type: #{train.type}"}
+    trains.each.with_index(1) { |train, i| puts "#{i}: Train - number: #{train.number} and type: #{train.type}" }
   end
 
   def route_list
-    routes.each.with_index(1) { |route, i| puts "#{i}: from #{route.first_station.name} to #{route.last_station.name}"}
+    routes.each.with_index(1) { |route, i| puts "#{i}: from #{route.first_station.name} to #{route.last_station.name}" }
   end
 
   def car_list
-    cars.each.with_index(1) { |car, i| puts "#{i}: #{car.class} - #{car.object_id}"}
+    cars.each.with_index(1) { |car, i| puts "#{i}: #{car.class} - #{car.object_id}" }
   end
 end
 

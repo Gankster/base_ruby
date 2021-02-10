@@ -8,11 +8,10 @@ class Bucket
   end
 
   def run
-    loop do
+    name = ''
+    while name != 'stop'
       print 'Enter the name of the product, or to summarize, enter "stop": '
       name = gets.chomp
-
-      break if name == 'stop'
 
       print 'Enter product price: '
       price = gets.chomp.to_f.round(2)

@@ -4,6 +4,7 @@ class CargoCar < Car
   attr_reader :total_volume, :occupied_volume
 
   def initialize(total_volume)
+    super
     @total_volume = total_volume || 0
     @occupied_volume = 0
     validate!

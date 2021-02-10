@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 print "Enter the coefficient 'a': "
 a = gets.chomp.to_f
 
@@ -9,7 +11,10 @@ c = gets.chomp.to_f
 
 d = (b**2 - 4 * a * c).round(2)
 
-return puts "No roots. D = #{d}" if d.negative?
+if d.negative?
+  puts "No roots. D = #{d}"
+  return
+end
 
 if d.zero?
   x = (-b / (2 * a)).round(2)

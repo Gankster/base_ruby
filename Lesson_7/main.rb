@@ -25,10 +25,21 @@ class Main
     0: Exit
   }
 
+  MAIN_ACTIONS = {
+    1 => :create_station,
+    2 => :create_train,
+    3 => :create_and_manage_route,
+    4 => :assign_route,
+    5 => :add_car,
+    6 => :disconnect_car,
+    7 => :fill_car,
+    8 => :move_train,
+    9 => :view_station_list_and_train_list,
+    0 => :stop_app
+  }.freeze
+
   CREATE_TRAIN = %(
-  Enter the number of train and type (for exsample: 3s3-d1 1):
-    1: Passenger
-    2: Cargo
+  Enter the number of train and type (1: Passenger, 2: Cargo) (for exsample: 3s3-d1 1):
   )
 
   CREATE_AND_MANAGE_ROUTE_MENU = %(
@@ -38,6 +49,12 @@ class Main
     3: Delete station from route
     0: Back
   )
+
+  CREATE_AND_MANAGE_ROUTE_ACTIONS = {
+    1 => :create_route,
+    2 => :add_station,
+    3 => :delete_station
+  }.freeze
 
   MOVE_TRAIN_MENU = %(
     Choose one of the options:
@@ -76,30 +93,14 @@ class Main
   attr_reader :stations, :routes, :trains
 
   def choose_action(option)
-    case option
-    when 1
-      create_station
-    when 2
-      create_train
-    when 3
-      create_and_manage_route
-    when 4
-      assign_route
-    when 5
-      add_car
-    when 6
-      disconnect_car
-    when 7
-      fill_car
-    when 8
-      move_train
-    when 9
-      view_station_list_and_train_list
-    when 0
-      self.stop = true
-    else
-      puts 'Wrong option'
-    end
+    action = MAIN_ACTIONS[option]
+    raise 'Wrong option' if action.nil?
+
+    send(action)
+  end
+
+  def stop_app
+    self.stop = true
   end
 
   def create_station
@@ -111,17 +112,17 @@ class Main
 
   def create_train
     puts CREATE_TRAIN
-    number, type = gets.chomp.split(' ')
+    number, type = gets.chomp.split
 
-    case type.to_i
-    when 1
-      trains << PassengerTrain.new(number)
-    when 2
-      trains << CargoTrain.new(number)
-    else
-      raise 'Wrong option of type'
-    end
-    train = trains.last
+    train = case type.to_i
+            when 1
+              PassengerTrain.new(number)
+            when 2
+              CargoTrain.new(number)
+            else
+              raise 'Wrong option of type'
+            end
+    trains << train
     puts "Train with number '#{train.number}' and type '#{train.type}' was created"
   rescue StandardError => e
     puts e.message
@@ -135,24 +136,17 @@ class Main
   end
 
   def create_and_manage_route_actions(option)
-    case option
-    when 1
-      create_route
-    when 2
-      add_station
-    when 3
-      delete_station
-    when 0
-      nil
-    else
-      puts 'Wrong option'
-    end
+    action = CREATE_AND_MANAGE_ROUTE_ACTIONS[option]
+    ruturn if action.nil? && option.zero?
+    raise 'Wrong option' if action.nil?
+
+    send(action)
   end
 
   def create_route
     puts 'Enter the first and the last stations from the list (for exsample: 1 2): '
     station_list
-    first, last = gets.chomp.split(' ').map { |i| i.to_i - 1 }
+    first, last = gets.chomp.split.map { |i| i.to_i - 1 }
     routes << Route.new(stations[first], stations[last])
     puts 'Done!'
   end
@@ -335,7 +329,9 @@ class Main
         car_property = train.type == :cargo ? 'volume' : 'seats'
         available = car.send("available_#{car_property}")
         occupied = car.send("occupied_#{car_property}")
-        puts "  Car: #{SecureRandom.hex(5)}, type: #{train.type}, quantity of available #{car_property}: #{available}, quantity of occupied #{car_property}: #{occupied}"
+        puts "  Car: #{SecureRandom.hex(5)}, type: #{train.type}, \
+              quantity of available #{car_property}: #{available}, \
+              quantity of occupied #{car_property}: #{occupied}"
       end
     end
   end
@@ -351,7 +347,9 @@ class Main
       car_property = train.type == :cargo ? 'volume' : 'seats'
       available = car.send("available_#{car_property}")
       occupied = car.send("occupied_#{car_property}")
-      puts "#{index}) Car: #{SecureRandom.hex(5)}, type: #{train.type}, quantity of available #{car_property}: #{available}, quantity of occupied #{car_property}: #{occupied}"
+      puts "#{index}) Car: #{SecureRandom.hex(5)}, type: #{train.type}, \
+            quantity of available #{car_property}: #{available}, \
+            quantity of occupied #{car_property}: #{occupied}"
 
       cars << car
       index += 1

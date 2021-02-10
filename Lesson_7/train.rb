@@ -99,10 +99,8 @@ class Train
     speed.zero?
   end
 
-  def each_by_cars
-    cars.each do |car|
-      yield(car)
-    end
+  def each_by_cars(&block)
+    cars.each(&block)
   end
 
   def cars_quantity

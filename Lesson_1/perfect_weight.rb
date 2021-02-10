@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 print 'What is your name? '
 name = gets.chomp.capitalize
 

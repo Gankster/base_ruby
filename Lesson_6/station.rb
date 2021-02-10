@@ -7,6 +7,7 @@ class Station
   include Validation
 
   attr_reader :trains, :name
+
   @stations = []
 
   class << self
