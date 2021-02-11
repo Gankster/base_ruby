@@ -35,22 +35,23 @@ module Validation
       self.class.validations.each do |validation|
         att, validation_type, option = validation
 
-        msg = case validation_type
-              when :presence
-                if instance_variable_get("@#{att}").nil? || instance_variable_get("@#{att}").empty?
-                  "#{att.capitalize} can't be nil"
-                end
-              when :format
-                "#{att.capitalize} has invalid format" if instance_variable_get("@#{att}") !~ option
-              when :type
-                unless instance_variable_get("@#{att}").is_a?(option)
-                  "#{att.capitalize} must be a #{option} class object"
-                end
-              else
-                "Wrong validation type: #{validation_type}"
-              end
+        self.class.define_method("validate_#{att}_presence") do
+          if instance_variable_get("@#{att}").nil? || instance_variable_get("@#{att}").empty?
+            raise "#{att.capitalize} can't be nil"
+          end
+        end
 
-        raise msg unless msg.nil?
+        self.class.define_method("validate_#{att}_format") do
+          raise "#{att.capitalize} has invalid format" if instance_variable_get("@#{att}") !~ option
+        end
+
+        self.class.define_method("validate_#{att}_type") do
+          unless instance_variable_get("@#{att}").is_a?(option)
+            raise "#{att.capitalize} must be a #{option} class object"
+          end
+        end
+
+        send("validate_#{att}_#{validation_type}")
       end
       nil
     end
