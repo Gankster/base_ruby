@@ -9,3 +9,6 @@ Metrics/MethodLength:
 
 Metrics/ClassLength:
   Max: 300
+
+Lint/MissingSuper:
+  Enabled: false
